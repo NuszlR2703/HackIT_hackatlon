@@ -46,7 +46,7 @@ while True:
 # register_user
 @app.post("/register-user", status_code=status.HTTP_201_CREATED)
 async def register_user(user: controller_classes.Register_User):
-    user_email = str(user.userEmail)
+    user_email = str(user.email)
 
     cursor.execute("""SELECT * FROM user_profile WHERE user_email = %s""", ([user_email]))
     num_rows = cursor.rowcount
@@ -83,6 +83,29 @@ async def get_certificates(user: controller_classes.Get_Courses_Certificates):
     result = openai.get_certificates(skill_name)
 
     return {"status_code": "201", "detail": result}
+
+# login_user
+@app.get("/login-user")
+async def login_user(user: controller_classes.Login_User):
+    email = str(user.email)
+    password = str(user.password)
+    cursor.execute("""SELECT * FROM user_profile WHERE user_email = %s and password = %s """,
+                   ([email, password]))
+    num_rows = cursor.rowcount
+    if num_rows == 0:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="404")
+
+    user_data = cursor.fetchall()
+    user_id = str(user_data[0]['id'])
+    first_name = str(user_data[0]['first_name'])
+    last_name = str(user_data[0]['last_name'])
+    birth_date = str(user_data[0]['birth_date'])
+
+    dictionary = {'userId': user_id, 'firstName': first_name, 'lastName': last_name, 'birthDate':birth_date}
+    json_dump = json.dumps(dictionary)
+    user_data_to_send = json.loads(json_dump)
+    return {"detail": "200", "user_data": user_data_to_send}
+
 
 
 if __name__ == "__main__":
