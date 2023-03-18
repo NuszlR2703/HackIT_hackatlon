@@ -3,7 +3,7 @@ import openai
 import requests
 import json
 
-api_key = "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"
+api_key = "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"
 
 
 def get_courses(skill_name):

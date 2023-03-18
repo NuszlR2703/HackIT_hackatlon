@@ -8,7 +8,7 @@ class Register_User(BaseModel):
     userEmail: str
     firstName: str
     lastName: str
-    birthDate: str
+    birthDate
     password: str
 
 

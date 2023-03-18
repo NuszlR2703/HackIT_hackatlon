@@ -2,6 +2,8 @@ import time
 from fastapi import FastAPI, Response, status, HTTPException, Request, File, UploadFile, Form
 import json
 import mysql.connector
+from starlette.middleware.cors import CORSMiddleware
+
 import database_connection as db_connect
 import uvicorn
 import controller_classes
@@ -9,6 +11,22 @@ import openai_function as openai
 
 # Start server: uvicorn main:app
 app = FastAPI()
+
+origins = [
+    "http://localhost.tiangolo.com",
+    "https://localhost.tiangolo.com",
+    "http://localhost",
+    "http://localhost:4200",
+
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 while True:
     try:
