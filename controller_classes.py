@@ -13,7 +13,8 @@ class Register_User(BaseModel):
 
 
 class Get_Courses_Certificates(BaseModel):
-    skill_name: str
+    skillId: str
+    id: str
 
 class Login_User(BaseModel):
     email: str

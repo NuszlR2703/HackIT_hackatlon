@@ -3,7 +3,7 @@ import openai
 import requests
 import json
 
-api_key = "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"
+api_key = "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"
 
 
 def get_courses(skill_name):
@@ -30,7 +30,7 @@ def get_courses(skill_name):
     return response
 
 
-def get_certificates(skill_name):
+def get_certificates(skill_name, old_response):
     response = []
     openai.api_key = api_key
     while len(response) == 0:

@@ -69,18 +69,27 @@ async def register_user(user: controller_classes.Register_User):
 
 @app.get("/get-courses", status_code=status.HTTP_200_OK)
 async def get_courses(user: controller_classes.Get_Courses_Certificates):
-    skill_name = str(user.skill_name)
-    print(skill_name)
-    result = openai.get_courses(skill_name)
+
+    result = openai.get_courses("Python")
 
     return {"status_code": "201", "detail": result}
 
 
 @app.get("/get-certificates", status_code=status.HTTP_200_OK)
 async def get_certificates(user: controller_classes.Get_Courses_Certificates):
-    skill_name = str(user.skill_name)
-    print(skill_name)
-    result = openai.get_certificates(skill_name)
+    user_id = str(user.id)
+    skill_id = str(user.skillId)
+
+    cursor.execute("""SELECT cl.certificate_link, sk.skill_name FROM certificates_list cl join skills sk 
+    on sk.skill_id = cl.fk_skill_id WHERE cl.fk_skill_id = %s AND cl.fk_user_id = %s""", ([skill_id, user_id]))
+    response_list = cursor.fetchall()
+    result_list = []
+    for i in response_list:
+        result_list.append(i['certificate_link'])
+
+    print(result_list)
+    print(response_list[0]['skill_name'])
+    result = openai.get_certificates(response_list[0]['skill_name'], result_list)
 
     return {"status_code": "201", "detail": result}
 
