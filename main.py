@@ -4,6 +4,7 @@ import json
 import mysql.connector
 import database_connection as db_connect
 import uvicorn
+import controller_classes
 
 # Start server: uvicorn main:app
 app = FastAPI()
@@ -21,10 +22,28 @@ while True:
 # ++++++++++++++++++++++++
 # API
 # ++++++++++++++++++++++++
-# login_user
-@app.get("/test-api-call")
-async def login_user():
-    return {"detail": "200", "message": "Test API"}
+# register_user
+@app.get("/register-user")
+async def register_user(user: controller_classes.Register_User):
+    user_email = str(user.user_email)
+
+    cursor.execute("""SELECT * FROM user_profile WHERE user_email = %s""", ([user_email]))
+    num_rows = cursor.rowcount
+    if num_rows != 0:
+        raise HTTPException(status_code=status.HTTP_306_RESERVED, detail="The email address is already in use!")
+
+    first_name = str(user.first_name)
+    last_name = str(user.first_name)
+    birth_date = str(user.birth_date)
+    password = str(user.password)
+
+    sql_body = """INSERT INTO user_profile ( user_email, first_name, last_name, birth_date, password) VALUES \
+    (%s, %s, %s, %s, %s)"""
+    sql_params = (user_email, first_name, last_name, birth_date, password)
+    cursor.execute(sql_body, sql_params)
+    connect_DB.commit()
+
+    return {"status_code": "201", "detail": "User profile created!"}
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
