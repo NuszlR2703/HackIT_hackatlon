@@ -1,8 +1,9 @@
 import os
 import openai
 import requests
+import json
 
-api_key = "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"
+api_key = "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"
 
 
 def get_courses(skill_name):
@@ -33,7 +34,17 @@ def get_certificates(skill_name):
         presence_penalty=0
     )
     response = completion.choices[0].text
-    print(response)
+    lines = [line.strip() for line in response.split('\n') if line.strip()]
+
+    # Remove empty spaces
+    clean_text = ' '.join(lines)
+
+    response = json.loads(clean_text)
+
+    for i in response:
+        print(i['url'])
+
+
     return response
 
 

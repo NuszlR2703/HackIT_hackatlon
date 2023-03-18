@@ -28,16 +28,16 @@ while True:
 # register_user
 @app.post("/register-user", status_code=status.HTTP_201_CREATED)
 async def register_user(user: controller_classes.Register_User):
-    user_email = str(user.user_email)
+    user_email = str(user.userEmail)
 
     cursor.execute("""SELECT * FROM user_profile WHERE user_email = %s""", ([user_email]))
     num_rows = cursor.rowcount
     if num_rows != 0:
         raise HTTPException(status_code=status.HTTP_306_RESERVED, detail="The email address is already in use!")
 
-    first_name = str(user.first_name)
-    last_name = str(user.first_name)
-    birth_date = str(user.birth_date)
+    first_name = str(user.firstName)
+    last_name = str(user.firstName)
+    birth_date = str(user.birthDate)
     password = str(user.password)
 
     sql_body = """INSERT INTO user_profile ( user_email, first_name, last_name, birth_date, password) VALUES \

@@ -5,10 +5,10 @@ from pydantic import BaseModel
 
 
 class Register_User(BaseModel):
-    user_email: str
-    first_name: str
-    last_name: str
-    birth_date: str
+    userEmail: str
+    firstName: str
+    lastName: str
+    birthDate: str
     password: str
 
 
