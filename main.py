@@ -98,11 +98,13 @@ async def login_user(user: controller_classes.Login_User):
 
     user_data = cursor.fetchall()
     user_id = str(user_data[0]['user_id'])
+    email = str(user_data[0]['user_email'])
     first_name = str(user_data[0]['first_name'])
     last_name = str(user_data[0]['last_name'])
     birth_date = str(user_data[0]['birth_date'])
 
-    dictionary = {'id': user_id, 'firstName': first_name, 'lastName': last_name, 'birthDate': birth_date}
+    dictionary = {'id': user_id, 'email': email, 'firstName': first_name, 'lastName': last_name,
+                  'birthDate': birth_date}
     json_dump = json.dumps(dictionary)
     user_data_to_send = json.loads(json_dump)
     return {"detail": "200", "user_data": user_data_to_send}
