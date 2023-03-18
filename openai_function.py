@@ -3,10 +3,10 @@ import openai
 import requests
 import json
 
-api_key = "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"
+api_key = "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"
 
 
-def get_courses(skill_name):
+def get_courses(skill_name, old_response):
     response = []
     openai.api_key = api_key
     while len(response) == 0:
@@ -22,11 +22,14 @@ def get_courses(skill_name):
         response = completion.choices[0].text
         lines = [line.strip() for line in response.split('\n') if line.strip()]
         clean_text = ' '.join(lines)
-        response = json.loads(clean_text)
-
-        for i, obj in enumerate(response):
-            if not check_url(obj['url']):
-                del response[i]
+        if len(clean_text) != 0:
+            response = json.loads(clean_text)
+            for i, obj in enumerate(response):
+                if not check_url(obj['url']):
+                    del response[i]
+            print(old_response)
+            set2 = set(old_response)
+            response = [obj['url'] for i, obj in enumerate(response) if obj['url'] not in set2]
     return response
 
 
@@ -46,14 +49,14 @@ def get_certificates(skill_name, old_response):
         response = completion.choices[0].text
         lines = [line.strip() for line in response.split('\n') if line.strip()]
         clean_text = ' '.join(lines)
-        response = json.loads(clean_text)
-        for i, obj in enumerate(response):
-            if not check_url(obj['url']):
-                del response[i]
-        print(old_response)
-        print(response)
-        set2 = set(old_response)
-        response = [obj['url'] for i, obj in enumerate(response) if obj['url'] not in set2]
+        if len(clean_text) != 0 :
+            response = json.loads(clean_text)
+            for i, obj in enumerate(response):
+                if not check_url(obj['url']):
+                    del response[i]
+            print(old_response)
+            set2 = set(old_response)
+            response = [obj['url'] for i, obj in enumerate(response) if obj['url'] not in set2]
     return response
 
 
