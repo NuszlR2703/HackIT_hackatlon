@@ -12,13 +12,15 @@ app = FastAPI()
 
 while True:
     try:
-        connect_DB = mysql.connector.connect(host=db_connect.db_host, user=db_connect.db_user, passwd=db_connect.db_password, database=db_connect.db_name)
+        connect_DB = mysql.connector.connect(host=db_connect.db_host, user=db_connect.db_user,
+                                             passwd=db_connect.db_password, database=db_connect.db_name)
         cursor = connect_DB.cursor(dictionary=True, buffered=True)
         break
     except Exception as error:
         print("Connecting to database failed")
         print("Error: ", error)
         time.sleep(5)
+
 
 # ++++++++++++++++++++++++
 # API
@@ -46,21 +48,21 @@ async def register_user(user: controller_classes.Register_User):
 
     return {"status_code": "201", "detail": "User profile created!"}
 
+
 @app.get("/get-courses", status_code=status.HTTP_200_OK)
 async def get_courses(user: controller_classes.Get_courses_certificates):
     skill_name = str(user.skill_name)
     print(skill_name)
     result = openai.get_courses(skill_name)
 
-
     return {"status_code": "201", "detail": result}
+
 
 @app.get("/get-certificates", status_code=status.HTTP_200_OK)
 async def get_certificates(user: controller_classes.Get_courses_certificates):
     skill_name = str(user.skill_name)
     print(skill_name)
     result = openai.get_certificates(skill_name)
-
 
     return {"status_code": "201", "detail": result}
 
