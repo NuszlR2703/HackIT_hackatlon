@@ -1,18 +1,19 @@
-import os
 import openai
 import requests
 import json
 
-api_key = "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"
+api_key = "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"
 
 
-def get_courses(skill_name, old_response):
+def get_courses(skill_name, old_response, experience_level):
     response = []
     openai.api_key = api_key
+    cnt = 0
     while len(response) == 0:
         completion = openai.Completion.create(
             model="text-davinci-003",
-            prompt=f"enrollable courses with link to improve {skill_name} skills only name and url in JSON format",
+            prompt=f"enrollable {experience_level} courses with link to improve {skill_name} skills only name and\
+             url in JSON format",
             temperature=0.7,
             max_tokens=1938,
             top_p=1,
@@ -30,16 +31,18 @@ def get_courses(skill_name, old_response):
             print(old_response)
             set2 = set(old_response)
             response = [obj['url'] for i, obj in enumerate(response) if obj['url'] not in set2]
+        print(cnt + 1)
     return response
 
 
-def get_certificates(skill_name, old_response):
+def get_certificates(skill_name, old_response, experience_level):
     response = []
     openai.api_key = api_key
     while len(response) == 0:
         completion = openai.Completion.create(
             model="text-davinci-003",
-            prompt=f"enrollable certificates with link to improve {skill_name} skills only name and url in JSON format",
+            prompt=f"enrollable {experience_level} certificates with link to improve {skill_name} skills only name \
+            and url in JSON format",
             temperature=0.7,
             max_tokens=1938,
             top_p=1,
@@ -49,7 +52,7 @@ def get_certificates(skill_name, old_response):
         response = completion.choices[0].text
         lines = [line.strip() for line in response.split('\n') if line.strip()]
         clean_text = ' '.join(lines)
-        if len(clean_text) != 0 :
+        if len(clean_text) != 0:
             response = json.loads(clean_text)
             for i, obj in enumerate(response):
                 if not check_url(obj['url']):

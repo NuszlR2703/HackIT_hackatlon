@@ -67,58 +67,6 @@ async def register_user(user: controller_classes.Register_User):
     return {"status_code": "201", "detail": "User profile created!"}
 
 
-@app.get("/get-courses", status_code=status.HTTP_200_OK)
-async def get_courses(user: controller_classes.Get_Courses_Certificates):
-    user_id = str(user.id)
-    skill_id = str(user.skillId)
-
-    cursor.execute("""SELECT c.course_link, sk.skill_name FROM course_list c join skills sk 
-        on sk.skill_id = c.fk_skill_id WHERE c.fk_skill_id = %s AND c.fk_user_id = %s""", ([skill_id, user_id]))
-    response_list = cursor.fetchall()
-    result_list = []
-    if len(response_list) != 0 :
-        for i in response_list:
-            result_list.append(i['course_link'])
-    else:
-        cursor.execute("""SELECT skill_name FROM skills WHERE skill_id = %s""", ([skill_id]))
-        response_list = cursor.fetchall()
-
-    result = openai.get_courses(response_list[0]['skill_name'], result_list)
-    for i in result:
-        sql_body = """INSERT INTO course_list ( fk_user_id, fk_skill_id, course_link) VALUES (%s, %s, %s)"""
-        sql_params = (user_id, skill_id, i)
-        cursor.execute(sql_body, sql_params)
-        connect_DB.commit()
-
-    return {"status_code": "201", "detail": result}
-
-
-@app.get("/get-certificates", status_code=status.HTTP_200_OK)
-async def get_certificates(user: controller_classes.Get_Courses_Certificates):
-    user_id = str(user.id)
-    skill_id = str(user.skillId)
-
-    cursor.execute("""SELECT cl.certificate_link, sk.skill_name FROM certificates_list cl join skills sk 
-    on sk.skill_id = cl.fk_skill_id WHERE cl.fk_skill_id = %s AND cl.fk_user_id = %s""", ([skill_id, user_id]))
-    response_list = cursor.fetchall()
-    result_list = []
-    if len(response_list) != 0:
-        for i in response_list:
-            result_list.append(i['certificate_link'])
-    else:
-        cursor.execute("""SELECT skill_name FROM skills WHERE skill_id = %s""", ([skill_id]))
-        response_list = cursor.fetchall()
-
-    result = openai.get_certificates(response_list[0]['skill_name'], result_list)
-    for i in result:
-        sql_body = """INSERT INTO certificates_list ( fk_user_id, fk_skill_id, certificate_link) VALUES (%s, %s, %s)"""
-        sql_params = (user_id, skill_id, i)
-        cursor.execute(sql_body, sql_params)
-        connect_DB.commit()
-
-    return {"status_code": "201", "detail": result}
-
-
 # login_user
 @app.post("/login-user")
 async def login_user(user: controller_classes.Login_User):
@@ -142,6 +90,90 @@ async def login_user(user: controller_classes.Login_User):
     json_dump = json.dumps(dictionary)
     user_data_to_send = json.loads(json_dump)
     return {"detail": "200", "user_data": user_data_to_send}
+
+
+@app.get("/get-courses", status_code=status.HTTP_200_OK)
+async def get_courses(user: controller_classes.Get_Courses_Certificates):
+    user_id = str(user.id)
+    skill_id = str(user.skillId)
+    experience_level = str(user.experienceLevel)
+
+    cursor.execute("""SELECT c.course_link, sk.skill_name FROM course_list c join skills sk 
+        on sk.skill_id = c.fk_skill_id WHERE c.fk_skill_id = %s AND c.fk_user_id = %s""", ([skill_id, user_id]))
+    response_list = cursor.fetchall()
+    result_list = []
+    if len(response_list) != 0:
+        for i in response_list:
+            result_list.append(i['course_link'])
+    else:
+        cursor.execute("""SELECT skill_name FROM skills WHERE skill_id = %s""", ([skill_id]))
+        response_list = cursor.fetchall()
+
+    result = openai.get_courses(response_list[0]['skill_name'], result_list, experience_level)
+    for i in result:
+        sql_body = """INSERT INTO course_list ( fk_user_id, fk_skill_id, course_link) VALUES (%s, %s, %s)"""
+        sql_params = (user_id, skill_id, i)
+        cursor.execute(sql_body, sql_params)
+        connect_DB.commit()
+
+    return {"status_code": "201", "detail": result}
+
+
+@app.get("/get-certificates", status_code=status.HTTP_200_OK)
+async def get_certificates(user: controller_classes.Get_Courses_Certificates):
+    user_id = str(user.id)
+    skill_id = str(user.skillId)
+    experience_level = str(user.experienceLevel)
+
+    cursor.execute("""SELECT cl.certificate_link, sk.skill_name FROM certificates_list cl join skills sk 
+    on sk.skill_id = cl.fk_skill_id WHERE cl.fk_skill_id = %s AND cl.fk_user_id = %s""", ([skill_id, user_id]))
+    response_list = cursor.fetchall()
+    result_list = []
+    if len(response_list) != 0:
+        for i in response_list:
+            result_list.append(i['certificate_link'])
+    else:
+        cursor.execute("""SELECT skill_name FROM skills WHERE skill_id = %s""", ([skill_id]))
+        response_list = cursor.fetchall()
+
+    result = openai.get_certificates(response_list[0]['skill_name'], result_list, experience_level)
+    for i in result:
+        sql_body = """INSERT INTO certificates_list ( fk_user_id, fk_skill_id, certificate_link) VALUES (%s, %s, %s)"""
+        sql_params = (user_id, skill_id, i)
+        cursor.execute(sql_body, sql_params)
+        connect_DB.commit()
+
+    return {"status_code": "201", "detail": result}
+
+
+@app.post("/get-skills")
+async def get_skills():
+    cursor.execute("""SELECT * FROM skills""")
+    response_list = cursor.fetchall()
+    response = []
+
+    for i in range(0, len(response_list)):
+        item = {"id": int(response_list[i]['skill_id']),
+                "skillName": str(response_list[i]['skill_name'])
+                }
+        response.append(item)
+
+    return response
+
+
+@app.post("/get-skills")
+async def get_skills():
+    cursor.execute("""SELECT * FROM skills""")
+    response_list = cursor.fetchall()
+    response = []
+
+    for i in range(0, len(response_list)):
+        item = {"id": int(response_list[i]['skill_id']),
+                "skillName": str(response_list[i]['skill_name'])
+                }
+        response.append(item)
+
+    return response
 
 
 if __name__ == "__main__":

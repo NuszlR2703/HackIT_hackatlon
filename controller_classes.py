@@ -15,6 +15,8 @@ class Register_User(BaseModel):
 class Get_Courses_Certificates(BaseModel):
     skillId: str
     id: str
+    experienceLevel: str
+
 
 class Login_User(BaseModel):
     email: str
