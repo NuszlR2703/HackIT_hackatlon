@@ -5,6 +5,7 @@ import mysql.connector
 import database_connection as db_connect
 import uvicorn
 import controller_classes
+import openai_function as openai
 
 # Start server: uvicorn main:app
 app = FastAPI()
@@ -23,7 +24,7 @@ while True:
 # API
 # ++++++++++++++++++++++++
 # register_user
-@app.get("/register-user")
+@app.post("/register-user", status_code=status.HTTP_201_CREATED)
 async def register_user(user: controller_classes.Register_User):
     user_email = str(user.user_email)
 
@@ -44,6 +45,25 @@ async def register_user(user: controller_classes.Register_User):
     connect_DB.commit()
 
     return {"status_code": "201", "detail": "User profile created!"}
+
+@app.get("/get-courses", status_code=status.HTTP_200_OK)
+async def get_courses(user: controller_classes.Get_courses_certificates):
+    skill_name = str(user.skill_name)
+    print(skill_name)
+    result = openai.get_courses(skill_name)
+
+
+    return {"status_code": "201", "detail": result}
+
+@app.get("/get-certificates", status_code=status.HTTP_200_OK)
+async def get_certificates(user: controller_classes.Get_courses_certificates):
+    skill_name = str(user.skill_name)
+    print(skill_name)
+    result = openai.get_certificates(skill_name)
+
+
+    return {"status_code": "201", "detail": result}
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -9,3 +9,6 @@ class Register_User(BaseModel):
     last_name: str
     birth_date: str
     password: str
+
+class Get_courses_certificates(BaseModel):
+    skill_name: str
