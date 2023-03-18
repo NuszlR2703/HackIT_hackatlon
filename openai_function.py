@@ -2,13 +2,12 @@ import openai
 import requests
 import json
 
-api_key = "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"
+api_key = "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"
 
 
 def get_courses(skill_name, old_response, experience_level):
     response = []
     openai.api_key = api_key
-    cnt = 0
     while len(response) == 0:
         completion = openai.Completion.create(
             model="text-davinci-003",
@@ -31,7 +30,6 @@ def get_courses(skill_name, old_response, experience_level):
             print(old_response)
             set2 = set(old_response)
             response = [obj['url'] for i, obj in enumerate(response) if obj['url'] not in set2]
-        print(cnt + 1)
     return response
 
 

@@ -86,10 +86,10 @@ async def login_user(user: controller_classes.Login_User):
     return {"detail": "200", "user_data": user_data_to_send}
 
 
-@app.get("/get-courses", status_code=status.HTTP_200_OK)
+@app.post("/get-courses", status_code=status.HTTP_200_OK)
 async def get_courses(user: controller_classes.Get_Courses_Certificates):
-    user_id = str(user.id)
-    skill_id = str(user.skillId)
+    user_id = int(user.userId)
+    skill_id = int(user.skillId)
     experience_level = str(user.experienceLevel)
 
     cursor.execute("""SELECT c.course_link, sk.skill_name FROM course_list c join skills sk 
@@ -113,10 +113,10 @@ async def get_courses(user: controller_classes.Get_Courses_Certificates):
     return {"status_code": "201", "detail": result}
 
 
-@app.get("/get-certificates", status_code=status.HTTP_200_OK)
+@app.post("/get-certificates", status_code=status.HTTP_200_OK)
 async def get_certificates(user: controller_classes.Get_Courses_Certificates):
-    user_id = str(user.id)
-    skill_id = str(user.skillId)
+    user_id = int(user.userId)
+    skill_id = int(user.skillId)
     experience_level = str(user.experienceLevel)
 
     cursor.execute("""SELECT cl.certificate_link, sk.skill_name FROM certificates_list cl join skills sk 
