@@ -9,7 +9,6 @@ import uvicorn
 import controller_classes
 import openai_function as openai
 
-# Start server: uvicorn main:app
 app = FastAPI()
 
 origins = ["*"]
@@ -34,10 +33,6 @@ while True:
         time.sleep(5)
 
 
-# ++++++++++++++++++++++++
-# API
-# ++++++++++++++++++++++++
-# register_user
 @app.post("/register-user", status_code=status.HTTP_201_CREATED)
 async def register_user(user: controller_classes.Register_User):
     user_email = str(user.email)
@@ -61,7 +56,6 @@ async def register_user(user: controller_classes.Register_User):
     return {"status_code": "201", "detail": "User profile created!"}
 
 
-# login_user
 @app.post("/login-user")
 async def login_user(user: controller_classes.Login_User):
     email = str(user.email)
@@ -79,10 +73,8 @@ async def login_user(user: controller_classes.Login_User):
     last_name = str(user_data[0]['last_name'])
     birth_date = str(user_data[0]['birth_date'])
 
-    dictionary = {'id': user_id, 'email': email, 'firstName': first_name, 'lastName': last_name,
-                  'birthDate': birth_date}
-    json_dump = json.dumps(dictionary)
-    user_data_to_send = json.loads(json_dump)
+    user_data_to_send = {'id': user_id, 'email': email, 'firstName': first_name, 'lastName': last_name,
+                         'birthDate': birth_date}
     return {"detail": "200", "user_data": user_data_to_send}
 
 
@@ -140,22 +132,18 @@ async def get_certificates(user: controller_classes.Get_Courses_Certificates):
     return {"status_code": "201", "detail": result}
 
 
-@app.post("/get-skills")
+@app.post("/get-skills", status_code=status.HTTP_200_OK)
 async def get_skills():
     cursor.execute("""SELECT * FROM skills""")
     response_list = cursor.fetchall()
     response = []
-
     for i in range(0, len(response_list)):
-        item = {"id": int(response_list[i]['skill_id']),
-                "skillName": str(response_list[i]['skill_name'])
-                }
+        item = {"id": int(response_list[i]['skill_id']), "skillName": str(response_list[i]['skill_name'])}
         response.append(item)
-
     return response
 
 
-@app.post("/save-skills")
+@app.post("/save-skills", status_code=status.HTTP_200_OK)
 async def save_skills(user: controller_classes.Save_Skills):
     user_id = str(user.userId)
     skill_list = list(user.skillList)
@@ -170,7 +158,6 @@ async def save_skills(user: controller_classes.Save_Skills):
             cursor.execute(sql_body, sql_params)
             connect_DB.commit()
 
-
     return {"status_code": "201", "detail": "Skills added to the profile!"}
 
 
@@ -178,8 +165,10 @@ async def save_skills(user: controller_classes.Save_Skills):
 async def get_user_skills(user: controller_classes.Get_User_Skills):
     user_id = str(user.userId)
 
-    cursor.execute("""SELECT sk.skill_name, usl.fk_skill_id FROM user_skill_list usl join skills sk on  sk.skill_id = usl.fk_skill_id  WHERE usl.fk_user_id = %s""",
-                   ([user_id]))
+    cursor.execute(
+        """SELECT sk.skill_name, usl.fk_skill_id FROM user_skill_list usl join skills sk on  sk.skill_id = 
+        usl.fk_skill_id  WHERE usl.fk_user_id = %s""",
+        ([user_id]))
     num_rows = cursor.rowcount
     skill_item_list = []
     if num_rows != 0:
@@ -194,7 +183,6 @@ async def get_user_skills(user: controller_classes.Get_User_Skills):
             skill_item_list.append(skill_item)
     else:
         response = {"detail": "200", "skillList": skill_item_list}
-
 
     return response
 

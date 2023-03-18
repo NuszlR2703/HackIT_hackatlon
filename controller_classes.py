@@ -1,10 +1,7 @@
-# ++++++++++++++++++++++++++
-# BASEMODEL EXTENSION CLASS
-# ++++++++++++++++++++++++++
 from array import array
-
 from pydantic import BaseModel
-from typing import List, Any
+from typing import List
+
 
 class Register_User(BaseModel):
     email: str
@@ -24,13 +21,16 @@ class Login_User(BaseModel):
     email: str
     password: str
 
+
 class Skill(BaseModel):
     id: int
     skillName: str
+
+
 class Save_Skills(BaseModel):
     userId: int
     skillList: List[Skill]
 
+
 class Get_User_Skills(BaseModel):
     userId: int
-
