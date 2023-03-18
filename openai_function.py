@@ -7,46 +7,50 @@ api_key = "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"
 
 
 def get_courses(skill_name):
+    response = []
     openai.api_key = api_key
-    completion = openai.Completion.create(
-        model="text-davinci-003",
-        prompt=f"enrollable courses with link to improve {skill_name} skills only name and url in JSON format",
-        temperature=0.7,
-        max_tokens=1938,
-        top_p=1,
-        frequency_penalty=0,
-        presence_penalty=0
-    )
-    response = completion.choices[0].text
-    lines = [line.strip() for line in response.split('\n') if line.strip()]
-    clean_text = ' '.join(lines)
-    response = json.loads(clean_text)
+    while len(response) == 0:
+        completion = openai.Completion.create(
+            model="text-davinci-003",
+            prompt=f"enrollable courses with link to improve {skill_name} skills only name and url in JSON format",
+            temperature=0.7,
+            max_tokens=1938,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0
+        )
+        response = completion.choices[0].text
+        lines = [line.strip() for line in response.split('\n') if line.strip()]
+        clean_text = ' '.join(lines)
+        response = json.loads(clean_text)
 
-    for i, obj in enumerate(response):
-        if not check_url(obj['url']):
-            del response[i]
+        for i, obj in enumerate(response):
+            if not check_url(obj['url']):
+                del response[i]
     return response
 
 
 def get_certificates(skill_name):
+    response = []
     openai.api_key = api_key
-    completion = openai.Completion.create(
-        model="text-davinci-003",
-        prompt=f"enrollable certificates with link to improve {skill_name} skills only name and url in JSON format",
-        temperature=0.7,
-        max_tokens=1938,
-        top_p=1,
-        frequency_penalty=0,
-        presence_penalty=0
-    )
-    response = completion.choices[0].text
-    lines = [line.strip() for line in response.split('\n') if line.strip()]
-    clean_text = ' '.join(lines)
-    response = json.loads(clean_text)
+    while len(response) == 0:
+        completion = openai.Completion.create(
+            model="text-davinci-003",
+            prompt=f"enrollable certificates with link to improve {skill_name} skills only name and url in JSON format",
+            temperature=0.7,
+            max_tokens=1938,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0
+        )
+        response = completion.choices[0].text
+        lines = [line.strip() for line in response.split('\n') if line.strip()]
+        clean_text = ' '.join(lines)
+        response = json.loads(clean_text)
 
-    for i, obj in enumerate(response):
-        if not check_url(obj['url']):
-            del response[i]
+        for i, obj in enumerate(response):
+            if not check_url(obj['url']):
+                del response[i]
     return response
 
 
