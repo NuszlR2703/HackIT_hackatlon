@@ -31,3 +31,6 @@ class Save_Skills(BaseModel):
     userId: int
     skillList: List[Skill]
 
+class Get_User_Skills(BaseModel):
+    userId: int
+

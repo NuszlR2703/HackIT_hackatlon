@@ -157,25 +157,46 @@ async def get_skills():
 
 @app.post("/save-skills")
 async def save_skills(user: controller_classes.Save_Skills):
-    print(user.skillList)
-
-    user_id = str(user.id)
+    user_id = str(user.userId)
     skill_list = list(user.skillList)
-    print(skill_list)
-    
+    cursor.execute("""DELETE FROM user_skill_list WHERE fk_user_id = %s""",
+                   ([user_id]))
+    connect_DB.commit()
 
-
-    for i in skill_list:
-        cursor.execute("""SELECT * FROM user_skill_list WHERE fk_user_id = %s AND fk_skill_id = %s""", ([user_id, i['id']]))
-        num_rows = cursor.rowcount
-        if num_rows != 0:
-            sql_body = """INSERT INTO user_skill_list ( fk_user_id, fk_skill_id) VALUES (%s, %s, %s)"""
-            sql_params = (user_id, i['id'])
+    if len(skill_list) != 0:
+        for i in skill_list:
+            sql_body = """INSERT INTO user_skill_list ( fk_user_id, fk_skill_id) VALUES (%s, %s)"""
+            sql_params = (user_id, i.id)
             cursor.execute(sql_body, sql_params)
             connect_DB.commit()
 
 
     return {"status_code": "201", "detail": "Skills added to the profile!"}
+
+
+@app.post("/get-user-skills")
+async def get_user_skills(user: controller_classes.Get_User_Skills):
+    user_id = str(user.userId)
+
+    cursor.execute("""SELECT sk.skill_name, usl.fk_skill_id FROM user_skill_list usl join skills sk on  sk.skill_id = usl.fk_skill_id  WHERE usl.fk_user_id = %s""",
+                   ([user_id]))
+    num_rows = cursor.rowcount
+    skill_item_list = []
+    if num_rows != 0:
+        user_data = cursor.fetchall()
+        skill_item_list = []
+        response = {"detail": "200", "skillList": skill_item_list}
+
+        for i in range(0, len(user_data)):
+            skill_item = {"skillId": str(user_data[i]['fk_skill_id']),
+                          "skillName": str(user_data[i]['skill_name'])
+                          }
+            skill_item_list.append(skill_item)
+    else:
+        response = {"detail": "200", "skillList": skill_item_list}
+
+
+    return response
 
 
 if __name__ == "__main__":
