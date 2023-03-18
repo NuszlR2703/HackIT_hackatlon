@@ -51,10 +51,9 @@ def get_certificates(skill_name, old_response):
             if not check_url(obj['url']):
                 del response[i]
         print(old_response)
-        response['teszt'] = 'teszt.ro'
         print(response)
         set2 = set(old_response)
-        response = [i for i in response if i not in set2]
+        response = [obj['url'] for i, obj in enumerate(response) if obj['url'] not in set2]
     return response
 
 
