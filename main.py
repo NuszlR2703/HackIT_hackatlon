@@ -73,7 +73,7 @@ async def login_user(user: controller_classes.Login_User):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="404")
 
     user_data = cursor.fetchall()
-    user_id = str(user_data[0]['user_id'])
+    user_id = int(user_data[0]['user_id'])
     email = str(user_data[0]['user_email'])
     first_name = str(user_data[0]['first_name'])
     last_name = str(user_data[0]['last_name'])
@@ -188,7 +188,7 @@ async def get_user_skills(user: controller_classes.Get_User_Skills):
         response = {"detail": "200", "skillList": skill_item_list}
 
         for i in range(0, len(user_data)):
-            skill_item = {"skillId": str(user_data[i]['fk_skill_id']),
+            skill_item = {"skillId": int(user_data[i]['fk_skill_id']),
                           "skillName": str(user_data[i]['skill_name'])
                           }
             skill_item_list.append(skill_item)
