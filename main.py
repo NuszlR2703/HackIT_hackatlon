@@ -2,7 +2,7 @@ import time
 from fastapi import FastAPI, Response, status, HTTPException, Request, File, UploadFile, Form
 import json
 import mysql.connector
-from starlette.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 
 import database_connection as db_connect
 import uvicorn
@@ -12,13 +12,7 @@ import openai_function as openai
 # Start server: uvicorn main:app
 app = FastAPI()
 
-origins = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
-    "http://localhost",
-    "http://localhost:4200",
-
-]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -161,19 +155,27 @@ async def get_skills():
     return response
 
 
-@app.post("/get-skills")
-async def get_skills():
-    cursor.execute("""SELECT * FROM skills""")
-    response_list = cursor.fetchall()
-    response = []
+@app.post("/save-skills")
+async def save_skills(user: controller_classes.Save_Skills):
+    print(user.skillList)
 
-    for i in range(0, len(response_list)):
-        item = {"id": int(response_list[i]['skill_id']),
-                "skillName": str(response_list[i]['skill_name'])
-                }
-        response.append(item)
+    user_id = str(user.id)
+    skill_list = list(user.skillList)
+    print(skill_list)
+    
 
-    return response
+
+    for i in skill_list:
+        cursor.execute("""SELECT * FROM user_skill_list WHERE fk_user_id = %s AND fk_skill_id = %s""", ([user_id, i['id']]))
+        num_rows = cursor.rowcount
+        if num_rows != 0:
+            sql_body = """INSERT INTO user_skill_list ( fk_user_id, fk_skill_id) VALUES (%s, %s, %s)"""
+            sql_params = (user_id, i['id'])
+            cursor.execute(sql_body, sql_params)
+            connect_DB.commit()
+
+
+    return {"status_code": "201", "detail": "Skills added to the profile!"}
 
 
 if __name__ == "__main__":
