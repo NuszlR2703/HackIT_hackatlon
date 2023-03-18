@@ -84,8 +84,9 @@ async def get_certificates(user: controller_classes.Get_Courses_Certificates):
 
     return {"status_code": "201", "detail": result}
 
+
 # login_user
-@app.get("/login-user")
+@app.post("/login-user")
 async def login_user(user: controller_classes.Login_User):
     email = str(user.email)
     password = str(user.password)
@@ -96,16 +97,15 @@ async def login_user(user: controller_classes.Login_User):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="404")
 
     user_data = cursor.fetchall()
-    user_id = str(user_data[0]['id'])
+    user_id = str(user_data[0]['user_id'])
     first_name = str(user_data[0]['first_name'])
     last_name = str(user_data[0]['last_name'])
     birth_date = str(user_data[0]['birth_date'])
 
-    dictionary = {'userId': user_id, 'firstName': first_name, 'lastName': last_name, 'birthDate':birth_date}
+    dictionary = {'id': user_id, 'firstName': first_name, 'lastName': last_name, 'birthDate': birth_date}
     json_dump = json.dumps(dictionary)
     user_data_to_send = json.loads(json_dump)
     return {"detail": "200", "user_data": user_data_to_send}
-
 
 
 if __name__ == "__main__":
