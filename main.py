@@ -50,7 +50,7 @@ async def register_user(user: controller_classes.Register_User):
 
 
 @app.get("/get-courses", status_code=status.HTTP_200_OK)
-async def get_courses(user: controller_classes.Get_courses_certificates):
+async def get_courses(user: controller_classes.Get_Courses_Certificates):
     skill_name = str(user.skill_name)
     print(skill_name)
     result = openai.get_courses(skill_name)
@@ -59,7 +59,7 @@ async def get_courses(user: controller_classes.Get_courses_certificates):
 
 
 @app.get("/get-certificates", status_code=status.HTTP_200_OK)
-async def get_certificates(user: controller_classes.Get_courses_certificates):
+async def get_certificates(user: controller_classes.Get_Courses_Certificates):
     skill_name = str(user.skill_name)
     print(skill_name)
     result = openai.get_certificates(skill_name)

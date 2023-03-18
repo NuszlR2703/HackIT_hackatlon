@@ -2,7 +2,7 @@ import os
 import openai
 import requests
 
-api_key = "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"
+api_key = "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"
 
 
 def get_courses(skill_name):
@@ -17,6 +17,7 @@ def get_courses(skill_name):
         presence_penalty=0
     )
     response = completion.choices[0].text
+    print(response)
     return response
 
 
@@ -32,6 +33,7 @@ def get_certificates(skill_name):
         presence_penalty=0
     )
     response = completion.choices[0].text
+    print(response)
     return response
 
 
