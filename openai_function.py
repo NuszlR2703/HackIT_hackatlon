@@ -2,7 +2,7 @@ import openai
 import requests
 import json
 
-api_key = "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"
+api_key = "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"
 
 
 def get_courses(skill_name, old_response, experience_level):
@@ -27,7 +27,6 @@ def get_courses(skill_name, old_response, experience_level):
             for i, obj in enumerate(response):
                 if not check_url(obj['url']):
                     del response[i]
-            print(old_response)
             set2 = set(old_response)
             response = [obj['url'] for i, obj in enumerate(response) if obj['url'] not in set2]
     return response
@@ -55,7 +54,6 @@ def get_certificates(skill_name, old_response, experience_level):
             for i, obj in enumerate(response):
                 if not check_url(obj['url']):
                     del response[i]
-            print(old_response)
             set2 = set(old_response)
             response = [obj['url'] for i, obj in enumerate(response) if obj['url'] not in set2]
     return response
