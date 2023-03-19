@@ -1,0 +1,24 @@
+@import 'core/scss/angular/libs/flatpickr.component.scss';
+@import 'core/scss/angular/libs/select.component.scss';
+@import 'core/scss/angular/libs/datatables.component.scss';
+.ng-dropdown-panel {
+  border: 1px solid transparent;
+}
+
+.ng-dropdown-panel.ng-select-bottom {
+  position: relative;
+  border: none;
+  z-index: 1050;
+}
+.bg-light-gray {
+  border: 1px solid #2d343e24;
+  border-radius: 0.7rem;
+}
+
+.table td {
+  padding-left: 0;
+}
+
+.table th {
+  padding-left: 0;
+}

@@ -1,0 +1,118 @@
+<div class="content-wrapper p-0">
+  <app-loader *ngIf="loading"></app-loader>
+  <div *ngIf="!loading" class="content-body">
+    <!-- User List -->
+    <section class="users-list-wrapper">
+      <div>
+        <h4>Education types</h4>
+
+        <table
+          *ngIf="educationTypes"
+          id="datatable"
+          class="table table-borderless table-thead-bordered table-align-middle card-table"
+        >
+          <thead>
+            <tr>
+              <th
+                style="background-color: transparent"
+                class="text-left"
+              >
+                Id.
+              </th>
+              <th
+                class="text-center"
+                style="background-color: transparent"
+              >
+                Education type name
+              </th>
+
+              <th
+                class="table-column-pl-0"
+                class="text-center"
+                style="background-color: transparent"
+              >
+                Action
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr
+              *ngFor="
+                let educationType of educationTypes;
+                let i = index
+              "
+            >
+              <td
+                class="table-column-pl-0 d-flex justify-content-start"
+                *ngIf="educationType.id"
+              >
+                <div class="badge badge-pill badge-success">
+                  #{{ educationType.id }}.
+                </div>
+              </td>
+              <td
+                class="table-column-pl-0 d-flex justify-content-start"
+                *ngIf="!educationType.id"
+              >
+                <div class="badge badge-pill badge-success">
+                  #{{ i + 1 }}.
+                </div>
+              </td>
+              <td class="table-column-pl-0">
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="educationType.name"
+                  placeholder="Add education type name"
+                  name="name+{{ i }}"
+                />
+              </td>
+              <td
+                class="table-column-pl-0 d-flex justify-content-center"
+              >
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  (click)="removeFromList(educationType.id)"
+                >
+                  <i data-feather="x"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-12">
+        <h5 class="font-italic" *ngIf="!educationTypes">
+          The list of your studies is currently empty...
+        </h5>
+
+        <div class="d-flex justify-content-center">
+          <button
+            class="btn btn-block btn-secondary"
+            (click)="addNewEducationTypeItem()"
+          >
+            <i
+              data-feather="plus-circle"
+              class="text-white feather-32"
+            ></i>
+          </button>
+        </div>
+      </div>
+      <div class="col-12">
+        <!-- submit and cancel button -->
+        <button
+          type="button"
+          (click)="saveEducationTypes()"
+          class="btn btn-primary mr-1 mt-1"
+          rippleEffect
+        >
+          Save changes
+        </button>
+      </div>
+    </section>
+    <!--/ User List -->
+  </div>
+</div>

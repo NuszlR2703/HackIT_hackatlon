@@ -1,0 +1,517 @@
+<div class="content-wrapper p-0">
+  <app-loader *ngIf="loading"></app-loader>
+  <div class="content-body" *ngIf="!loading">
+    <!-- content-header component -->
+    <app-content-header
+      [contentHeader]="contentHeader"
+    ></app-content-header>
+
+    <!-- account setting page -->
+    <section id="page-account-settings" class="mt-2">
+      <div class="row nav-vertical d-flex">
+        <div class="col-md-3 mb-2 mb-md-0">
+          <ul
+            ngbNav
+            #navVertical="ngbNav"
+            class="nav nav-pills flex-column nav-left"
+          >
+            <li class="nav-item" ngbNavItem>
+              <a
+                ngbNavLink
+                class="nav-link d-flex py-75"
+                id="account-pill-general"
+                data-toggle="pill"
+                href="#account-vertical-general"
+                aria-expanded="true"
+              >
+                <i data-feather="user" class="font-medium-3 mr-1"></i>
+                <span class="font-weight-bold">General</span>
+              </a>
+              <ng-template ngbNavContent>
+                <div class="card">
+                  <div class="card-body">
+                    <!-- header media -->
+                    <div class="media">
+                      <a class="mr-25">
+                        <img
+                          src="assets/images/avatars/4.png"
+                          class="mr-50"
+                          alt="profile image"
+                          height="150"
+                          style="border-radius: 50%"
+                          width="150"
+                        />
+                      </a>
+                      <!-- upload and reset button -->
+                      <div class="media-body mt-75 ml-1">
+                        <button
+                          (click)="file.click()"
+                          for="account-upload"
+                          class="btn btn-sm btn-primary mb-75 mr-75"
+                          rippleEffect
+                        >
+                          Upload
+                        </button>
+                        <input
+                          type="file"
+                          #file
+                          id="account-upload"
+                          hidden
+                          accept="image/*"
+                          (change)="handleFileChange($event)"
+                        />
+                        <button
+                          class="btn btn-sm btn-outline-secondary mb-75"
+                          rippleEffect
+                        >
+                          Reset
+                        </button>
+                        <p>
+                          Allowed JPG, GIF or PNG. Max size of 800kB
+                        </p>
+                      </div>
+                      <!--/ upload and reset button -->
+                    </div>
+                    <!--/ header media -->
+
+                    <!-- form -->
+                    <form class="validate-form mt-2">
+                      <div class="row">
+                        <div class="col-12 col-sm-6">
+                          <div class="form-group">
+                            <label for="name">First Name</label>
+                            <input
+                              type="text"
+                              [(ngModel)]="currentUser.firstName"
+                              class="form-control"
+                              id="firstName"
+                              name="firstName"
+                              placeholder="First Name"
+                            />
+                          </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                          <div class="form-group">
+                            <label for="name">Last Name</label>
+                            <input
+                              type="text"
+                              [(ngModel)]="currentUser.lastName"
+                              class="form-control"
+                              id="firstName"
+                              name="lastName"
+                              placeholder="Last Name"
+                            />
+                          </div>
+                        </div>
+
+                        <div class="col-12 col-sm-4">
+                          <div class="form-group">
+                            <label for="account-birth-date"
+                              >Birthday</label
+                            >
+                            <input
+                              id="account-birth-date"
+                              name="account-birth-date"
+                              class="form-control"
+                              style="background-color: #efeded"
+                              [(ngModel)]="currentUser.birthDate"
+                              mwlFlatpickr
+                              [convertModelValue]="true"
+                            />
+                          </div>
+                        </div>
+
+                        <div class="col-12">
+                          <button
+                            type="submit"
+                            class="btn btn-primary mt-2 mr-1"
+                            rippleEffect
+                            (click)="saveStudentGeneralDetails()"
+                          >
+                            Save changes
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                    <!--/ form -->
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+
+            <li class="nav-item" ngbNavItem>
+              <a
+                ngbNavLink
+                class="nav-link d-flex py-75"
+                id="account-pill-social"
+                data-toggle="pill"
+                href="#account-vertical-social"
+                aria-expanded="false"
+              >
+                <i
+                  data-feather="feather"
+                  class="font-medium-3 mr-1"
+                ></i>
+                <span class="font-weight-bold">Skills</span>
+              </a>
+              <ng-template ngbNavContent>
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <!-- social header -->
+                      <div class="col-12">
+                        <div class="d-flex align-items-center mb-2">
+                          <i
+                            data-feather="feather"
+                            class="font-medium-3"
+                          ></i>
+                          <h4 class="mb-0 ml-75">Skills</h4>
+                        </div>
+                      </div>
+
+                      <div class="col-12">
+                        <label class="form-label" for="requirements"
+                          >Skills</label
+                        >
+                        <div class="form-group">
+                          <!-- Add custom Tag -->
+                          <ng-select
+                            [items]="jobRequirements"
+                            [multiple]="true"
+                            bindLabel="skillName"
+                            placeholder="Select tag"
+                            [(ngModel)]="SelectTag"
+                          >
+                            <ng-template
+                              ng-label-tmp
+                              let-item="item"
+                              let-clear="clear"
+                            >
+                              <span class="ng-value-label">
+                                {{ item.skillName }}</span
+                              >
+                              <span
+                                class="ng-value-icon right"
+                                (click)="clear(item)"
+                                aria-hidden="true"
+                                >×</span
+                              >
+                            </ng-template>
+                          </ng-select>
+                          <!--/ Add custom Tag -->
+                        </div>
+                      </div>
+
+                      <div class="col-12">
+                        <!-- submit and cancel button -->
+                        <button
+                          type="submit"
+                          class="btn btn-primary mr-1 mt-1"
+                          rippleEffect
+                          (click)="saveStudentSkills()"
+                        >
+                          Save changes
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+
+            <li class="nav-item" ngbNavItem>
+              <a
+                ngbNavLink
+                class="nav-link d-flex py-75"
+                id="account-pill-social"
+                data-toggle="pill"
+                href="#account-vertical-social"
+                aria-expanded="false"
+              >
+                <i
+                  data-feather="bookmark"
+                  class="font-medium-3 mr-1"
+                ></i>
+                <span class="font-weight-bold">Education</span>
+              </a>
+              <ng-template ngbNavContent>
+                <div class="card">
+                  <div class="card-body">
+                    <!-- form -->
+                    <form class="validate-form">
+                      <div class="row">
+                        <!-- social header -->
+                        <div class="col-12">
+                          <div class="d-flex align-items-center mb-2">
+                            <i
+                              data-feather="link"
+                              class="font-medium-3"
+                            ></i>
+                            <h4 class="mb-0 ml-75">Social Links</h4>
+                          </div>
+                        </div>
+
+                        <div class="col-12">
+                          <div
+                            class="card p-1"
+                            style="background-color: #f5f5f5"
+                            *ngFor="
+                              let education of educations;
+                              let i = index
+                            "
+                          >
+                            <div class="row">
+                              <div
+                                class="col-12 d-flex justify-content-end"
+                              >
+                                <div
+                                  class="d-flex align-items-end mr-1"
+                                >
+                                  <button
+                                    class="btn btn-danger btn-sm"
+                                    (click)="
+                                      removeFromList(education.id)
+                                    "
+                                  >
+                                    <i data-feather="x"></i>
+                                  </button>
+                                </div>
+
+                                <div>
+                                  <label
+                                    class="form-label"
+                                    for="instName+{{ i }}"
+                                    >Active</label
+                                  >
+                                  <div
+                                    class="custom-control custom-switch custom-switch-success"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      class="custom-control-input"
+                                      id="instName+{{ i }}"
+                                      checked
+                                    />
+                                    <label
+                                      class="custom-control-label"
+                                      for="instName+{{ i }}"
+                                    >
+                                      <span class="switch-icon-left"
+                                        ><i data-feather="check"></i
+                                      ></span>
+                                      <span class="switch-icon-right"
+                                        ><i data-feather="x"></i
+                                      ></span>
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                class="col-12 my-1 m-lg-0 d-flex justify-content-start"
+                              >
+                                <div
+                                  class="badge badge-pill badge-success"
+                                >
+                                  #{{ i + 1 }}.
+                                </div>
+                              </div>
+
+                              <div class="col-6 my-1 m-lg-0">
+                                <label
+                                  class="form-label"
+                                  for="instName+{{ i }}"
+                                  >Institution name</label
+                                >
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  (ngModelChange)="checkBeforeSave()"
+                                  [(ngModel)]="
+                                    education.institutionName
+                                  "
+                                  placeholder="Add institution name"
+                                  name="instName+{{ i }}"
+                                />
+                              </div>
+
+                              <div class="col-6 my-1 m-lg-0">
+                                <label
+                                  class="form-label"
+                                  for="instName+{{ i }}"
+                                  >Major</label
+                                >
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  [(ngModel)]="education.major"
+                                  (ngModelChange)="checkBeforeSave()"
+                                  placeholder="Add major"
+                                  name="major+{{ i }}"
+                                />
+                              </div>
+                              <div class="col-12 my-1 m-lg-0">
+                                <label
+                                  class="form-label"
+                                  for="type+{{ i }}"
+                                  >Education Type</label
+                                >
+                                <div class="form-group">
+                                  <ng-select
+                                    name="type+{{ i }}"
+                                    [items]="educationTypes"
+                                    style="background-color: #efeded"
+                                    (ngModelChange)="
+                                      checkBeforeSave()
+                                    "
+                                    bindLabel="name"
+                                    [(ngModel)]="education.type"
+                                    [loading]="selectBasicLoading"
+                                  >
+                                  </ng-select>
+                                </div>
+                              </div>
+
+                              <div class="col-6 my-1 m-lg-0">
+                                <label
+                                  class="form-label"
+                                  for="instName+{{ i }}"
+                                  >Start date</label
+                                >
+                                <input
+                                  id="education-start-date"
+                                  name="education-start-date"
+                                  class="form-control"
+                                  style="background-color: #efeded"
+                                  [(ngModel)]="education.startDate"
+                                  (ngModelChange)="checkBeforeSave()"
+                                  placeholder="YYYY-MM-DD"
+                                  mwlFlatpickr
+                                  dateFormat="Y-m-d"
+                                  [convertModelValue]="true"
+                                />
+                              </div>
+                              <div class="col-6 my-1 m-lg-0">
+                                <label
+                                  class="form-label"
+                                  for="instName+{{ i }}"
+                                  >End date</label
+                                >
+                                <input
+                                  id="education-end-date"
+                                  name="education-end-date"
+                                  class="form-control"
+                                  style="background-color: #efeded"
+                                  [(ngModel)]="education.endDate"
+                                  (ngModelChange)="checkBeforeSave()"
+                                  mwlFlatpickr
+                                  placeholder="YYYY-MM-DD"
+                                  dateFormat="Y-m-d"
+                                  [convertModelValue]="true"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- facebook link input -->
+                        <div class="col-12">
+                          <h5
+                            class="font-italic"
+                            *ngIf="educations.length == 0"
+                          >
+                            The list of your studies is currently
+                            empty...
+                          </h5>
+
+                          <div class="d-flex justify-content-center">
+                            <button
+                              class="btn btn-block btn-primary"
+                              (click)="addNewEducationItem()"
+                            >
+                              <i
+                                data-feather="plus-circle"
+                                class="text-white feather-32"
+                              ></i>
+                            </button>
+                          </div>
+                        </div>
+                        <div class="col-12">
+                          <!-- submit and cancel button -->
+                          <button
+                            type="submit"
+                            class="btn btn-primary mr-1 mt-1"
+                            rippleEffect
+                            [disabled]="!isRequiredFull"
+                            (click)="saveStudentEducations()"
+                          >
+                            Save changes
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                    <!--/ form -->
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+        </div>
+        <div
+          [ngbNavOutlet]="navVertical"
+          class="col-12 col-md-9"
+        ></div>
+      </div>
+    </section>
+    <!--/ account setting page -->
+  </div>
+</div>
+
+<button
+  id="openModalThumbnailButton"
+  [hidden]="true"
+  data-toggle="modal"
+  (click)="openVerticallyCentered(imageModal)"
+>
+  Open Modal
+</button>
+
+<ng-template #imageModal let-c="close" let-d="dismiss">
+  <form (ngSubmit)="onSubmitImage()">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        Upload Thumbnail
+      </h4>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="d('Cross click')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <image-cropper
+        [imageChangedEvent]="imageChangedEvent"
+        [maintainAspectRatio]="true"
+        [aspectRatio]="1 / 1"
+        [resizeToWidth]="1920"
+        format="png"
+        (imageCropped)="imageCropped($event)"
+        (loadImageFailed)="loadImageFailed()"
+      ></image-cropper>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-light"
+        data-dismiss="modal"
+        (click)="d('Cross click')"
+      >
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+</ng-template>
