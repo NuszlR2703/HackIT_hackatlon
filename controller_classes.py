@@ -1,4 +1,3 @@
-from array import array
 from pydantic import BaseModel
 from typing import List
 
@@ -12,9 +11,9 @@ class Register_User(BaseModel):
 
 
 class Get_Courses_Certificates(BaseModel):
-    skillId: int
+    id: int
     userId: int
-    experienceLevel: str
+    experienceLevel: int
 
 
 class Login_User(BaseModel):
@@ -30,6 +29,15 @@ class Skill(BaseModel):
 class Save_Skills(BaseModel):
     userId: int
     skillList: List[Skill]
+
+
+class Get_All_Assessments(BaseModel):
+    userId: int
+
+
+class Assessment(BaseModel):
+    userId: int
+    id: int
 
 
 class Get_User_Skills(BaseModel):

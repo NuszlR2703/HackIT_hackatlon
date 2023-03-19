@@ -81,8 +81,8 @@ async def login_user(user: controller_classes.Login_User):
 @app.post("/get-courses", status_code=status.HTTP_200_OK)
 async def get_courses(user: controller_classes.Get_Courses_Certificates):
     user_id = int(user.userId)
-    skill_id = int(user.skillId)
-    experience_level = str(user.experienceLevel)
+    skill_id = int(user.id)
+    experience_level = int(user.experienceLevel)
 
     cursor.execute("""SELECT c.course_link, sk.skill_name FROM course_list c join skills sk 
         on sk.skill_id = c.fk_skill_id WHERE c.fk_skill_id = %s AND c.fk_user_id = %s""", ([skill_id, user_id]))
@@ -95,20 +95,44 @@ async def get_courses(user: controller_classes.Get_Courses_Certificates):
         cursor.execute("""SELECT skill_name FROM skills WHERE skill_id = %s""", ([skill_id]))
         response_list = cursor.fetchall()
 
-    result = openai.get_courses(response_list[0]['skill_name'], result_list, experience_level)
+    experience_level_temp = "Beginner"
+    match experience_level:
+        case 0:
+            experience_level_temp = "Beginner"
+        case 1:
+            experience_level_temp = "Intermediate"
+        case 2:
+            experience_level_temp = "Expert"
+
+    result = openai.get_courses(response_list[0]['skill_name'], result_list, experience_level_temp)
+
+    result_final = []
     for i in result:
-        sql_body = """INSERT INTO course_list ( fk_user_id, fk_skill_id, course_link) VALUES (%s, %s, %s)"""
-        sql_params = (user_id, skill_id, i)
+        sql_body = """INSERT INTO course_list ( course_name, fk_user_id, fk_skill_id, course_link, experience_level) 
+                    VALUES (%s, %s, %s, %s, %s)"""
+        sql_params = (i[0], user_id, skill_id, i[1], experience_level)
         cursor.execute(sql_body, sql_params)
         connect_DB.commit()
 
-    return {"status_code": "201", "detail": result}
+    cursor.execute(
+        """SELECT * FROM course_list WHERE fk_user_id = %s AND fk_skill_id = %s ORDER BY experience_level ASC""",
+        ([user_id, skill_id]))
+    response_list = cursor.fetchall()
+    for i in response_list:
+        result_item = {
+            "courseName": i['course_name'],
+            "courseLink": i['course_link'],
+            "experienceLevel": i['experience_level']
+        }
+        result_final.append(result_item)
+
+    return {"status_code": "201", "detail": result_final}
 
 
 @app.post("/get-certificates", status_code=status.HTTP_200_OK)
 async def get_certificates(user: controller_classes.Get_Courses_Certificates):
     user_id = int(user.userId)
-    skill_id = int(user.skillId)
+    skill_id = int(user.id)
     experience_level = str(user.experienceLevel)
 
     cursor.execute("""SELECT cl.certificate_link, sk.skill_name FROM certificates_list cl join skills sk 
@@ -122,14 +146,40 @@ async def get_certificates(user: controller_classes.Get_Courses_Certificates):
         cursor.execute("""SELECT skill_name FROM skills WHERE skill_id = %s""", ([skill_id]))
         response_list = cursor.fetchall()
 
-    result = openai.get_certificates(response_list[0]['skill_name'], result_list, experience_level)
+    experience_level_temp = "Beginner"
+    match experience_level:
+        case 0:
+            experience_level_temp = "Beginner"
+        case 1:
+            experience_level_temp = "Intermediate"
+        case 2:
+            experience_level_temp = "Expert"
+
+    result = openai.get_certificates(response_list[0]['skill_name'], result_list, experience_level_temp)
+
+    result_final = []
     for i in result:
-        sql_body = """INSERT INTO certificates_list ( fk_user_id, fk_skill_id, certificate_link) VALUES (%s, %s, %s)"""
-        sql_params = (user_id, skill_id, i)
+        sql_body = """INSERT INTO certificates_list ( certificate_name, fk_user_id, fk_skill_id, certificate_link, 
+        experience_level) 
+                    VALUES (%s, %s, %s, %s, %s)"""
+        sql_params = (i[0], user_id, skill_id, i[1], experience_level)
         cursor.execute(sql_body, sql_params)
         connect_DB.commit()
 
-    return {"status_code": "201", "detail": result}
+    cursor.execute(
+        """SELECT * FROM certificates_list WHERE fk_user_id = %s AND fk_skill_id = %s ORDER BY experience_level ASC""",
+        ([user_id, skill_id]))
+    response_list = cursor.fetchall()
+
+    for i in response_list:
+        result_item = {
+            "certificateName": i['certificate_name'],
+            "certificateLink": i['certificate_link'],
+            "experienceLevel": i['experience_level']
+        }
+        result_final.append(result_item)
+
+    return {"status_code": "201", "detail": result_final}
 
 
 @app.post("/get-skills", status_code=status.HTTP_200_OK)
@@ -177,12 +227,112 @@ async def get_user_skills(user: controller_classes.Get_User_Skills):
         response = {"detail": "200", "skillList": skill_item_list}
 
         for i in range(0, len(user_data)):
-            skill_item = {"skillId": int(user_data[i]['fk_skill_id']),
+            skill_item = {"id": int(user_data[i]['fk_skill_id']),
                           "skillName": str(user_data[i]['skill_name'])
                           }
             skill_item_list.append(skill_item)
     else:
         response = {"detail": "200", "skillList": skill_item_list}
+
+    return response
+
+
+@app.post("/get-all-assessments")
+async def get_all_assessments(user: controller_classes.Get_User_Skills):
+    user_id = str(user.userId)
+
+    cursor.execute("""SELECT * FROM user_skill_list WHERE fk_user_id = %s""", ([user_id]))
+    num_rows = cursor.rowcount
+    skill_item_list = []
+
+    if num_rows != 0:
+        skill_ids = cursor.fetchall()
+        for skill_item in skill_ids:
+            fk_skill_id = skill_item['fk_skill_id']
+            cursor.execute("""SELECT skill_name FROM skills WHERE skill_id = %s""",
+                           ([fk_skill_id]))
+            skill_item_name = cursor.fetchall()
+            skill_item_name = skill_item_name[0]['skill_name']
+
+            cursor.execute("""SELECT * FROM course_list WHERE fk_user_id = %s and fk_skill_id = %s ORDER BY 
+            experience_level""", ([user_id, fk_skill_id]))
+            num_rows = cursor.rowcount
+            course_list = []
+            if num_rows != 0:
+                course_item_list = cursor.fetchall()
+                for course_item in course_item_list:
+                    course_item_to_list = {
+                        "id": course_item['id'],
+                        "courseName": course_item['course_name'],
+                        "userId": course_item['fk_user_id'],
+                        "skillId": course_item['fk_skill_id'],
+                        "courseFile": course_item['course_file'],
+                        "courseLink": course_item['course_link'],
+                        "experienceLevel": course_item['experience_level']
+                    }
+                    course_list.append(course_item_to_list)
+
+            cursor.execute("""SELECT * FROM certificates_list WHERE fk_user_id = %s and fk_skill_id = %s 
+            ORDER BY experience_level""",
+                           ([user_id, fk_skill_id]))
+            num_rows = cursor.rowcount
+            certificate_list = []
+            if num_rows != 0:
+                certificate_item_list = cursor.fetchall()
+                for certificate_item in certificate_item_list:
+                    certificate_item_to_list = {
+                        "id": certificate_item['id'],
+                        "certificateName": certificate_item['certificate_name'],
+                        "userId": certificate_item['fk_user_id'],
+                        "skillId": certificate_item['fk_skill_id'],
+                        "certificateFile": certificate_item['certificate_file'],
+                        "certificateLink": certificate_item['certificate_link'],
+                        "experienceLevel": certificate_item['experience_level']
+                    }
+                    certificate_list.append(certificate_item_to_list)
+
+            skill_final_item = {
+                "id": fk_skill_id,
+                "skillName": skill_item_name,
+                "courseList": course_list,
+                "certificateList": certificate_list
+            }
+            skill_item_list.append(skill_final_item)
+    response = {"detail": "200", "skillList": skill_item_list}
+    return response
+
+
+@app.post("/delete-assessment")
+async def delete_assessment(user: controller_classes.Assessment):
+    user_id = str(user.userId)
+    assessment_id = str(user.id)
+
+    cursor.execute(
+        """DELETE FROM certificates_list WHERE fk_user_id = %s and id = %s""",
+        ([user_id, assessment_id]))
+    cursor.execute(
+        """DELETE FROM course_list WHERE fk_user_id = %s and id = %s""",
+        ([user_id, assessment_id]))
+    connect_DB.commit()
+
+    response = {"detail": "200"}
+
+    return response
+
+
+@app.post("/mark-as-done")
+async def mark_as_done(user: controller_classes.Assessment):
+    user_id = str(user.userId)
+    assessment_id = str(user.id)
+
+    cursor.execute("""UPDATE certificates_list SET certificate_file = 1 WHERE fk_user_id = %s and id = %s""",
+                   ([user_id, assessment_id]))
+    cursor.execute("""UPDATE course_list SET course_file = 1 WHERE fk_user_id = %s and id = %s""",
+                   ([user_id, assessment_id]))
+
+    connect_DB.commit()
+
+    response = {"detail": "200"}
 
     return response
 
