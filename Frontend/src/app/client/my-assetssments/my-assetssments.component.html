@@ -1,0 +1,219 @@
+<div class="content-wrapper p-0">
+  <app-loader *ngIf="loading"></app-loader>
+  <section id="feed" *ngIf="!loading">
+    <div class="row d-flex justify-content-center">
+      <div class="col-12">
+        <div class="card" *ngIf="!assessments.length">
+          <div class="col-12 d-flex justify-content-center">
+            <img src="assets/images/illustration/no-data-cuate.svg" />
+          </div>
+          <div class="col-12 d-flex justify-content-center">
+            <h4 class="font-italic font-weight-light m-0">
+              There are currently no assessment to display
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="row d-flex justify-content-center"
+      *ngFor="let assessment of assessments; let i = index"
+    >
+      <div class="col-12">
+        <div class="card profile-info-card p-1">
+          <div class="card-header">
+            <div class="col-12">
+              <p class="card-text my-2">{{ assessment.skillName }}</p>
+            </div>
+          </div>
+          <div class="card-body p-0">
+            <div *ngIf="assessment.courseList.length">
+              <h3>Courses</h3>
+              <div *ngFor="let course of assessment.courseList">
+                <div
+                  class="card p-1"
+                  style="background-color: #9ae3ca"
+                >
+                  <div class="row d-flex justify-content-center">
+                    <div class="col-8">
+                      <p
+                        style="line-height: 2.2re"
+                        class="text-start my-0 d-flex align-items-center"
+                      >
+                        {{ course.courseName
+                        }}<i
+                          data-feather="check-circle"
+                          *ngIf="course.courseFile"
+                        ></i>
+                      </p>
+                    </div>
+                    <div
+                      class="col-2 d-flex justify-content-start btn-icon"
+                    >
+                      <button
+                        *ngIf="course.experienceLevel == 0"
+                        class="btn btn-success"
+                        (click)="goToLink(course.courseLink)"
+                      >
+                        <i data-feather="play"></i>
+                      </button>
+                      <button
+                        *ngIf="course.experienceLevel == 1"
+                        class="btn btn-warning"
+                        (click)="goToLink(course.courseLink)"
+                      >
+                        <i data-feather="play"></i>
+                      </button>
+                      <button
+                        *ngIf="course.experienceLevel == 2"
+                        class="btn btn-danger"
+                        (click)="goToLink(course.courseLink)"
+                      >
+                        <i data-feather="play"></i>
+                      </button>
+                    </div>
+                    <div class="col-2">
+                      <div
+                        ngbDropdown
+                        container="body"
+                        class="text-center"
+                      >
+                        <button
+                          ngbDropdownToggle
+                          type="button"
+                          class="btn icon-btn btn-sm hide-arrow"
+                          rippleEffect
+                        >
+                          <h6
+                            [data-feather]="'more-vertical'"
+                            [class]="'cursor-pointer'"
+                          ></h6>
+                        </button>
+                        <div ngbDropdownMenu>
+                          <a
+                            ngbDropdownItem
+                            (click)="
+                              deleteAssessment(course, assessment.id)
+                            "
+                          >
+                            Delete assessment</a
+                          >
+                          <a
+                            ngbDropdownItem
+                            (click)="
+                              markAsDone(course, assessment.id)
+                            "
+                          >
+                            Mark as done</a
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="assessment.certificateList.length > 0">
+              <h3>Certificates</h3>
+              <div
+                *ngFor="let certificate of assessment.certificateList"
+              >
+                <div
+                  class="card p-1"
+                  style="background-color: #9ae3ca"
+                >
+                  <div class="row d-flex justify-content-center">
+                    <div class="col-8">
+                      <p
+                        style="line-height: 2.2re"
+                        class="text-start my-0 d-flex align-items-center"
+                      >
+                        {{ certificate.certificateName }}
+                        <i
+                          data-feather="check-circle"
+                          *ngIf="certificate.certificateFile"
+                        ></i>
+                      </p>
+                    </div>
+                    <div
+                      class="col-2 d-flex justify-content-start btn-icon"
+                    >
+                      <button
+                        *ngIf="certificate.experienceLevel == 0"
+                        class="btn btn-success"
+                        (click)="
+                          goToLink(certificate.certificateLink)
+                        "
+                      >
+                        <i data-feather="play"></i>
+                      </button>
+                      <button
+                        *ngIf="certificate.experienceLevel == 1"
+                        class="btn btn-warning"
+                        (click)="
+                          goToLink(certificate.certificateLink)
+                        "
+                      >
+                        <i data-feather="play"></i>
+                      </button>
+                      <button
+                        *ngIf="certificate.experienceLevel == 2"
+                        class="btn btn-danger"
+                        (click)="
+                          goToLink(certificate.certificateLink)
+                        "
+                      >
+                        <i data-feather="play"></i>
+                      </button>
+                    </div>
+                    <div class="col-2">
+                      <div
+                        ngbDropdown
+                        container="body"
+                        class="text-center"
+                      >
+                        <button
+                          ngbDropdownToggle
+                          type="button"
+                          class="btn icon-btn btn-sm hide-arrow"
+                          rippleEffect
+                        >
+                          <h6
+                            [data-feather]="'more-vertical'"
+                            [class]="'cursor-pointer'"
+                          ></h6>
+                        </button>
+                        <div ngbDropdownMenu>
+                          <a
+                            ngbDropdownItem
+                            (click)="
+                              deleteAssessment(
+                                certificate,
+                                assessment.id
+                              )
+                            "
+                          >
+                            Delete assessment</a
+                          >
+                          <a
+                            ngbDropdownItem
+                            (click)="
+                              markAsDone(certificate, assessment.id)
+                            "
+                          >
+                            Mark as done</a
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

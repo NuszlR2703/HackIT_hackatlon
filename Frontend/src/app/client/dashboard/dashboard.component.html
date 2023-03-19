@@ -1,0 +1,27 @@
+<div class="content-wrapper p-0">
+  <!-- <app-loader *ngIf="loading" ></app-loader> -->
+  <div *ngIf="!loading" class="content-body">
+    <!-- User List -->
+    <section class="users-list-wrapper">
+      <div>
+        <h2>Dashboard</h2>
+      </div>
+      <div class="row mt-5">
+        <div class="col-12">
+          <div class="card card-body welcome-message-card">
+            <h3 class="text-dark2 font-weight-bold2">
+              Welcome back, {{ currentUser.firstName }}
+              {{ currentUser.lastName }}! 👋
+            </h3>
+            <p class="text-dark2">
+              You are currently logged in as a student of a
+              university. Here you can manage your profile, opened
+              positions and others.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--/ User List -->
+  </div>
+</div>
