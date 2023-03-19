@@ -1,0 +1,43 @@
+@import '../bootstrap-extended/include'; // Bootstrap includes
+@import '../components/include'; // Components includes
+
+.bordered-layout {
+  .header-navbar {
+    &.floating-nav {
+    }
+    &.fixed-top {
+    }
+  }
+  .main-menu {
+    &.menu-light .navigation > li {
+      &.open:not(.menu-item-closing),
+      &.sidebar-group-active {
+        > a {
+          background: #2d343e;
+        }
+      }
+    }
+  }
+  .dropdown-menu {
+    background: f5f5f5;
+    box-shadow: $box-shadow;
+  }
+  .main-menu .navigation,
+  .main-menu {
+    background: $sidebar-bg;
+  }
+  .card,
+  .bs-stepper:not(.wizard-modern):not(.checkout-tab-steps),
+  .bs-stepper.wizard-modern .bs-stepper-content {
+    box-shadow: none;
+  }
+
+  .footer {
+    box-shadow: none !important;
+  }
+  .footer-fixed {
+    .footer {
+      border-top: 1px solid $border-color;
+    }
+  }
+}

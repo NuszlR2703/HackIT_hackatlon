@@ -1,0 +1,154 @@
+@import 'core/scss/core.scss';
+@import './assets/scss/styles';
+@import '~ngx-toastr/toastr.css';
+@font-face {
+  font-family: 'garet';
+  src: local('garet'),
+    url(./assets/fonts/garet/Garet-Book.ttf) format('truetype');
+}
+
+.card.company {
+  background-color: #efeded;
+}
+
+.card.university {
+  background-color: #efeded;
+}
+.card.student {
+  background-color: #efeded;
+}
+
+#toast-container > .toast-success {
+  background-image: none;
+  background-color: #4cd964;
+  box-shadow: none;
+  color: rgb(255, 255, 255);
+  border-style: solid;
+  border-image: #4cd964;
+  border-radius: 0.5rem;
+}
+#toast-container > .toast-error {
+  background-image: none;
+  background-color: #ea5455;
+  box-shadow: none;
+  color: rgb(255, 255, 255);
+  border-style: solid;
+  border-color: #ea5455;
+  border-radius: 0.5rem;
+}
+
+.feather-16 {
+  width: 16px;
+  height: 16px;
+}
+
+.feather-24 {
+  width: 24px;
+  height: 24px;
+}
+
+.feather-32 {
+  width: 32px;
+  height: 32px;
+}
+.feather-48 {
+  width: 48px;
+  height: 48px;
+}
+
+.text-yellow {
+  color: $yellow;
+}
+
+.profile-card {
+  background-color: #1114285c;
+  border-radius: 0rem;
+  border-top-right-radius: 2rem;
+}
+
+.profile-card-pos {
+  background-color: transparent;
+  margin-left: -2.2rem;
+  border-radius: 0rem;
+  border-top-right-radius: 5rem;
+}
+
+.lh-1 {
+  line-height: 1.4;
+}
+
+.welcome-message-card {
+  background-color: #06d48f;
+  border-radius: 1rem;
+}
+
+.text-dark2 {
+  color: #080a18;
+}
+
+.font-weight-bold2 {
+  font-weight: 800;
+}
+
+.login-text.h2 {
+  color: #f5f5f5;
+}
+
+.dropdown-toggle::after {
+  display: none;
+  background: transparent;
+}
+
+.show > .btn-outline-primary.dropdown-toggle {
+  background: transparent;
+}
+
+@media (max-width: 1199px) {
+  .content2 {
+    border-radius: 0px;
+  }
+  .header-navbar {
+    background-color: #f5f5f5;
+  }
+}
+
+@media (min-width: 1200px) {
+  .content2 {
+    border-bottom-left-radius: 1rem;
+  }
+  .header-navbar {
+    background-color: #2d343e;
+  }
+}
+
+.fill-red {
+  fill: red;
+}
+
+.card-apply-job-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  border-bottom: none;
+  padding: 1.5rem;
+  background-color: #efeded;
+  border-top-right-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
+}
+
+.card-apply-job {
+  border-radius: 0.5rem;
+  border: 1px solid #efeded;
+  margin-top: 1rem;
+}
+
+.ng-select .ng-select-container {
+  border-radius: 0.5rem !important;
+  background-color: #efeded !important;
+}
+
+.profile-info-card {
+  background-color: #696e75;
+}

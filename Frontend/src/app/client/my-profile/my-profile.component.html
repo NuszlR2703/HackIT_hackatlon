@@ -1,0 +1,288 @@
+<div class="content-wrapper p-0">
+  <app-loader *ngIf="loading"></app-loader>
+  <div class="content-body" *ngIf="!loading">
+    <!-- content-header component -->
+    <div id="user-profile">
+      <!-- profile header -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card profile-header mb-2">
+            <!-- profile cover photo -->
+            <div class="d-lg-block d-none">
+              <div
+                class="card-img-top d-flex justify-content-center align-items-center"
+                style="
+                  background: rgb(6, 212, 143);
+                  background: linear-gradient(
+                    17deg,
+                    rgba(6, 212, 143, 1) 0%,
+                    rgba(241, 236, 236, 1) 100%,
+                    rgba(255, 255, 255, 1) 100%
+                  );
+                "
+              >
+                <p class="display-1">Your New Skills Loading</p>
+              </div>
+            </div>
+            <div class="d-lg-none d-block">
+              <div
+                class="card-img-top d-flex justify-content-center align-items-center"
+                style="
+                  height: 27vh;
+                  background: rgb(6, 212, 143);
+                  background: linear-gradient(
+                    17deg,
+                    rgba(6, 212, 143, 1) 0%,
+                    rgba(241, 236, 236, 1) 100%,
+                    rgba(255, 255, 255, 1) 100%
+                  );
+                "
+              >
+                <p class="h1">Your New Skills Loading</p>
+              </div>
+            </div>
+
+            <!--/ profile cover photo -->
+
+            <div class="position-relative mt-2">
+              <!-- profile picture -->
+              <div class="row">
+                <div
+                  class="col-lg-2 col-12 d-flex justify-content-center px-0"
+                >
+                  <div class="profile-img-container">
+                    <div class="profile-img">
+                      <img
+                        src="assets/images/avatars/4.png"
+                        height="100%"
+                        width="100%"
+                        style="border-radius: 50%"
+                        alt="Card image"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="col-lg-10 col-12 d-flex justify-content-lg-start justify-content-center px-0 mb-lg-0 mb-4"
+                >
+                  <div class="profile-title mt-lg-0 mt-3 ml-lg-0">
+                    <h3 class="text-dark2 text-center">
+                      {{ currentUser.firstName }}
+                      {{ currentUser.lastName }}
+                    </h3>
+                    <a
+                      href="mailto:{{ currentUser.email }}"
+                      class="fw-medium"
+                      >{{ currentUser.email }}</a
+                    >
+                  </div>
+                </div>
+                <!-- profile title -->
+              </div>
+            </div>
+
+            <!-- tabs pill -->
+            <div class="profile-header-nav mt-0 mt-lg-3 mb-1">
+              <!-- navbar -->
+              <nav
+                class="navbar navbar-expand-md navbar-light justify-content-md-between w-100"
+              >
+                <!-- collapse  -->
+                <div
+                  class="collapse navbar-collapse"
+                  id="navbarSupportedContent"
+                  [ngbCollapse]="false"
+                >
+                  <div
+                    class="profile-tabs d-flex justify-content-between flex-wrap mt-1 mt-md-0"
+                  >
+                    <ul class="nav nav-pills mb-0">
+                      <li class="nav-item">
+                        <a
+                          class="nav-link font-weight-bold"
+                          [ngClass]="
+                            selected == 'foryou' ? 'active' : ''
+                          "
+                          (click)="changeView('foryou')"
+                        >
+                          <span class="d-none d-md-block"
+                            >For You</span
+                          >
+                          <i
+                            data-feather="user"
+                            class="d-block d-md-none"
+                          ></i>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a
+                          class="nav-link font-weight-bold"
+                          [ngClass]="
+                            selected == 'assesments' ? 'active' : ''
+                          "
+                          (click)="changeView('assesments')"
+                        >
+                          <span class="d-none d-md-block"
+                            >Assesments</span
+                          >
+                          <i
+                            data-feather="user"
+                            class="d-block d-md-none"
+                          ></i>
+                        </a>
+                      </li>
+                    </ul>
+
+                    <ul class="nav nav-pills mb-0">
+                      <li class="nav-item d-flex align-items-center">
+                        <button
+                          class="btn btn-outline-primary btn-sm"
+                          routerLink="../profile-settings"
+                          rippleEffect
+                        >
+                          <span>
+                            <i
+                              data-feather="edit"
+                              class="d-block d-md-none"
+                            ></i>
+                            <span
+                              class="font-weight-bold d-none d-md-block"
+                              >Edit</span
+                            >
+                          </span>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <!--/ collapse  -->
+              </nav>
+              <!--/ navbar -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- feed -->
+      <div *ngIf="selected == 'foryou'">
+        <section>
+          <div class="row d-flex justify-content-lg-start">
+            <div class="col-lg-3 col-12 mx-0">
+              <div class="row">
+                <div class="col-12">
+                  <!-- about -->
+                  <div class="card profile-info-card">
+                    <div class="card-body">
+                      <h4 class="mb-75">
+                        <i
+                          data-feather="info"
+                          class="feather-32 text-primary"
+                        ></i>
+                        About
+                      </h4>
+                      <hr />
+                      <div class="mt-2">
+                        <p
+                          class="mb-75 d-inline-block"
+                          *ngIf="currentUser.birthDate"
+                        >
+                          <i
+                            data-feather="calendar"
+                            class="feather-24 text-primary"
+                          ></i
+                          >&nbsp;Birthday:
+                          {{
+                            currentUser.birthDate
+                              | date : format : 'short'
+                          }}
+                        </p>
+                        <p
+                          class="mb-75 d-inline-block"
+                          *ngIf="!currentUser.birthDate"
+                        >
+                          <i
+                            data-feather="calendar"
+                            class="feather-24 text-primary"
+                          ></i
+                          >&nbsp;Birthday:
+                          <span class="font-italic"
+                            >There are currently no data to
+                            display</span
+                          >
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-12" *ngIf="skills">
+              <app-skills [currentUser]="currentUser"></app-skills>
+            </div>
+          </div>
+        </section>
+      </div>
+      <!-- feed -->
+      <div *ngIf="selected == 'assesments'">
+        <section>
+          <div class="row d-flex justify-content-lg-start">
+            <div class="col-lg-3 col-12 mx-0">
+              <div class="row">
+                <div class="col-12">
+                  <!-- about -->
+                  <div class="card profile-info-card">
+                    <div class="card-body">
+                      <h4 class="mb-75">
+                        <i
+                          data-feather="info"
+                          class="feather-32 text-primary"
+                        ></i>
+                        About
+                      </h4>
+                      <hr />
+                      <div class="mt-2">
+                        <p
+                          class="mb-75 d-inline-block"
+                          *ngIf="currentUser.birthDate"
+                        >
+                          <i
+                            data-feather="calendar"
+                            class="feather-24 text-primary"
+                          ></i
+                          >&nbsp;Birthday:
+                          {{
+                            currentUser.birthDate
+                              | date : format : 'short'
+                          }}
+                        </p>
+                        <p
+                          class="mb-75 d-inline-block"
+                          *ngIf="!currentUser.birthDate"
+                        >
+                          <i
+                            data-feather="calendar"
+                            class="feather-24 text-primary"
+                          ></i
+                          >&nbsp;Birthday:
+                          <span class="font-italic"
+                            >There are currently no data to
+                            display</span
+                          >
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-12" *ngIf="skills">
+              <app-my-assetssments
+                [currentUser]="currentUser"
+              ></app-my-assetssments>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

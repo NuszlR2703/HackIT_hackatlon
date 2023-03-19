@@ -1,0 +1,27 @@
+@import 'core/scss/base/pages/page-profile';
+
+.navbar-light {
+  background: #efeded;
+}
+
+.profile-info-card {
+  border: 1px solid #efeded;
+  background-color: #efeded;
+}
+
+#user-profile #profile-info .profile-likes {
+  fill: #d6494a;
+  stroke: #ea5455;
+}
+
+.btn-fixed {
+  position: fixed;
+  bottom: 5%;
+  right: 80px;
+  z-index: 1;
+  transition: all 0.2s ease-in-out;
+}
+
+.profile-header-nav .profile-tabs {
+  margin-left: 1rem;
+}
