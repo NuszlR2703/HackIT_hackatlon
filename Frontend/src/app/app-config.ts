@@ -17,7 +17,7 @@ import { CoreConfig } from 'core/types';
 export const coreConfig: CoreConfig = {
   app: {
     appName: 'MYSS', // App Name
-    appTitle: 'MYSS - You Press the MYSSship, We Do the Rest', // App Title
+    appTitle: 'MYSS - Make your skills strong!', // App Title
     appLogoImage: 'assets/images/logo/logo-wide.png', // App Logo
     appLogoDarkImage: 'assets/images/logo/logo-dark.png',
     appIcon: 'assets/images/logo/logo-wide.png',

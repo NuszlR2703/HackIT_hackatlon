@@ -84,6 +84,28 @@ export class MyAssetssmentsComponent implements OnInit {
     });
   }
 
+  getProgressInSkill(assessment, id) {
+    let done = 0;
+    let all = 0;
+
+    assessment.courseList.forEach((x) => {
+      if (x.courseFile == '1') {
+        done++;
+      }
+      all++;
+    });
+    assessment.certificateList.forEach((x) => {
+      if (x.certificateFile == '1') {
+        done++;
+      }
+      all++;
+    });
+
+    let progress = (done * 100) / all;
+
+    return progress;
+  }
+
   markAsDone(assessment, id) {
     let dto = {
       id: assessment.id,

@@ -19,7 +19,6 @@ import { MyProfileComponent } from './my-profile/my-profile.component';
 import { SettingsComponent } from './profile-settings/profile-settings.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ClientLayoutComponent } from './layout/client-layout.component';
-import { ImageCropperModule } from 'ngx-image-cropper';
 import { SkillsComponent } from './skills/skills.component';
 import { MyAssetssmentsComponent } from './my-assetssments/my-assetssments.component';
 
@@ -69,7 +68,6 @@ const routes: Routes = [
     CoreDirectivesModule,
     CoreSidebarModule,
     NgxDatatableModule,
-    ImageCropperModule,
     SharedModule,
     FlatpickrModule.forRoot(),
     AngularEditorModule,

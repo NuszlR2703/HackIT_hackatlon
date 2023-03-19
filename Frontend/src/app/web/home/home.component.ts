@@ -4,17 +4,9 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { Router } from '@angular/router';
-import { CookieService } from 'core/auth/service/cookie.service';
+
 import { CoreConfigService } from 'core/services/config.service';
-import { CustomToastrService } from 'core/services/toastr.service';
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition,
-} from '@angular/animations';
+
 import { Subject } from 'rxjs';
 import Parallax from 'parallax-js';
 

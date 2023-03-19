@@ -24,6 +24,14 @@
           <div class="card-header">
             <div class="col-12">
               <p class="card-text my-2">{{ assessment.skillName }}</p>
+              <div class="progress-wrapper">
+                <ngb-progressbar
+                  showValue="true"
+                  type="primary"
+                  [height]="progressbarHeight"
+                  [value]="getProgressInSkill(assessment, id)"
+                ></ngb-progressbar>
+              </div>
             </div>
           </div>
           <div class="card-body p-0">

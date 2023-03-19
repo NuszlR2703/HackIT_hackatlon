@@ -52,6 +52,16 @@
                 </h2></a
               >
             </li>
+            <li class="nav-item">
+              <a class="nav-link" (click)="scroll(future)"
+                ><h2
+                  class="my-2 h1 px-2 font-weight-bold"
+                  style="border-right: solid 1px black"
+                >
+                  Future
+                </h2></a
+              >
+            </li>
           </ul>
           <ul class="navbar-nav">
             <li class="nav-item">
@@ -280,22 +290,21 @@
             </div>
           </div>
         </div>
-        <div class="px-1" #future>
+        <div #future>
           <div
-            class="row mx-4"
+            class="row"
             style="
               margin-left: 0;
               margin-right: 0;
               background-color: #efeded;
-              border-radius: 1rem;
             "
           >
             <div class="col-12">
+              <h2 class="mx-1 p-2">Future</h2>
               <div
-                class="pricing-trial-content d-flex justify-content-between"
+                class="pricing-trial-content d-flex justify-content-between p-2"
               >
                 <div class="text-center text-md-left mt-3">
-                  <h3 class="text-primary">Progressbar ~ 10h</h3>
                   <h3 class="text-primary">
                     Twitter trendings ~ 10h
                   </h3>

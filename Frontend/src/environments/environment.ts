@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   hmr: false,
-  apiUrl: 'https://baa1-217-73-170-83.eu.ngrok.io',
+  apiUrl: 'https://a2b6-217-73-170-83.eu.ngrok.io',
 };
 
 /*
